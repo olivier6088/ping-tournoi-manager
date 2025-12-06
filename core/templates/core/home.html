@@ -3,94 +3,47 @@
 {% block content %}
 
 <!-- Bandeau d’intro -->
-<div class="mb-6 p-4 bg-white rounded-xl shadow flex items-center justify-between dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
+<div class="mb-6 p-5 bg-white rounded-xl shadow flex flex-col gap-2 md:flex-row md:items-center md:justify-between dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
   <div>
     <h2 class="text-lg font-semibold">🏓 Ping FFTT Manager</h2>
-    <p class="text-sm text-slate-600 dark:text-slate-300">Organisez vos tournois : joueurs, tableaux, poules, planning et exports.</p>
+    <p class="text-sm text-slate-600 dark:text-slate-300">Choisissez une action pour démarrer ou reprendre un tournoi.</p>
   </div>
-  <div class="flex gap-2">
-    <a href="{% url 'import_joueurs' %}" class="px-3 py-2 rounded-lg bg-sky-700 text-white text-sm hover:bg-sky-800 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">Importer des joueurs</a>
-    <a href="#" class="px-3 py-2 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-900 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus-visible:ring-offset-slate-800">Nouveau tournoi</a>
-  </div>
+  <a href="{% url 'admin:index' %}" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900 text-white text-sm hover:bg-slate-700 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus-visible:ring-offset-slate-800">
+    <span class="text-xs">⚙️</span> Accès admin
+  </a>
 </div>
 
-<!-- Grille principale -->
-<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
-  <!-- 1. Joueurs & Clubs -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">👥 Joueurs & Clubs</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Gérez vos licenciés, clubs et listes d’inscription.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="{% url 'import_joueurs' %}" class="px-3 py-2 rounded-lg bg-sky-700 text-white text-sm hover:bg-sky-800 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">Import CSV joueurs</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Liste des joueurs</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Clubs</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Inscriptions</a>
+<!-- Deux cartes : créer ou charger un tournoi -->
+<div class="grid gap-4 md:grid-cols-2">
+  <a href="{% url 'admin:competitions_tournoi_add' %}" class="group p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Nouveau</p>
+        <h3 class="text-lg font-semibold">Créer un nouveau tournoi</h3>
+      </div>
+      <span class="text-xl text-sky-700 transition group-hover:translate-x-1">→</span>
     </div>
-  </section>
-
-  <!-- 2. Tableaux & Règlement -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">🧩 Tableaux & Règlement</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Créez des tableaux (Simples/Doubles), quotas et contraintes.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Nouveau tableau</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Tous les tableaux</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Règles (2 simples + 1 double)</a>
+    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Définissez le nom, la date, le lieu et le nombre de tables pour démarrer un tournoi vierge.</p>
+    <div class="inline-flex items-center gap-2 text-sm font-medium text-sky-800 dark:text-sky-200">
+      Ouvrir le formulaire
+      <span class="text-base">📄</span>
     </div>
-  </section>
+  </a>
 
-  <!-- 3. Poules & Tirages -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">🐍 Poules & Tirages</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Tirage au serpent, anti-club, équilibrage et feuilles.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="px-3 py-2 rounded-lg bg-sky-700 text-white text-sm hover:bg-sky-800 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">Générer les poules</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Aperçu des poules</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Feuilles poules (PDF)</a>
+  <a href="{% url 'admin:competitions_tournoi_changelist' %}" class="group p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Continuer</p>
+        <h3 class="text-lg font-semibold">Charger un tournoi</h3>
+      </div>
+      <span class="text-xl text-sky-700 transition group-hover:translate-x-1">→</span>
     </div>
-  </section>
-
-  <!-- 4. Planning & Tables -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">🗓️ Planning & Tables</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Plan de 16 tables, créneaux, appels des matchs.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Planifier la journée</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Gestion des tables</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Appeler les joueurs</a>
+    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Retrouvez un tournoi existant (créé manuellement ou via YAML/JSON) et poursuivez sa gestion.</p>
+    <div class="inline-flex items-center gap-2 text-sm font-medium text-sky-800 dark:text-sky-200">
+      Voir la liste des tournois
+      <span class="text-base">📂</span>
     </div>
-  </section>
-
-  <!-- 5. Matchs & Saisie -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">📋 Matchs & Saisie</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Saisie set par set, calculs des classements de poule.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Saisir les scores</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Calcul “set average”</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Classements de poule</a>
-    </div>
-  </section>
-
-  <!-- 6. Élimination directe & Exports -->
-  <section class="p-4 bg-white rounded-xl shadow dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-    <h3 class="font-semibold mb-2">🏁 Élimination directe & Exports</h3>
-    <p class="text-sm text-slate-600 mb-3 dark:text-slate-300">Brackets (1/16 → Finale), PDF, CSV, FFTT.</p>
-    <div class="flex flex-wrap gap-2">
-      <a href="#" class="px-3 py-2 rounded-lg bg-sky-700 text-white text-sm hover:bg-sky-800 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">Générer le tableau final</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Visualiser le bracket</a>
-      <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Exports (PDF/CSV/FFTT)</a>
-    </div>
-  </section>
-
-</div>
-
-<!-- Barre d’actions rapides (option) -->
-<div class="mt-6 p-4 bg-white rounded-xl shadow flex flex-wrap gap-2 dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
-  <a href="{% url 'admin:index' %}" class="px-3 py-2 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-900 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus-visible:ring-offset-slate-800">Aller à l’admin</a>
-  <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Docs internes</a>
-  <a href="#" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-800 text-sm hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600">Paramètres</a>
+  </a>
 </div>
 
 {% endblock %}
