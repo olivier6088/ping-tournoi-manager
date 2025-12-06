@@ -1,4 +1,4 @@
-# 🏓 Ping FFTT Manager
+# 🏓 Ping Tournoi Manager
 
 Application **Django 6 + Tailwind CSS** pour la **création et la gestion de tournois de tennis de table FFTT**.
 
