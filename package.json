@@ -1,0 +1,9 @@
+{
+  "name": "ping-fftt",
+  "scripts": {
+    "dev": "concurrently \"python manage.py runserver\" \"python manage.py tailwind start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
