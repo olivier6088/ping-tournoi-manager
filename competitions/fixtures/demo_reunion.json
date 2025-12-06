@@ -1,0 +1,30 @@
+[
+  {"model":"competitions.club","pk":1,"fields":{"code":"RUN-SDT","nom":"Saint-Denis TT","ville":"Saint-Denis"}},
+  {"model":"competitions.club","pk":2,"fields":{"code":"RUN-SPT","nom":"Saint-Pierre TT","ville":"Saint-Pierre"}},
+
+  {"model":"competitions.joueur","pk":1,"fields":{
+    "licence":"974000001","nom":"Durand","prenom":"Alex","sexe":"M","date_naissance":"1990-05-12",
+    "club":1,"points":1150
+  }},
+  {"model":"competitions.joueur","pk":2,"fields":{
+    "licence":"974000002","nom":"Martin","prenom":"Léa","sexe":"F","date_naissance":"1998-09-03",
+    "club":2,"points":920
+  }},
+  {"model":"competitions.joueur","pk":3,"fields":{
+    "licence":"974000003","nom":"Hoareau","prenom":"Jean","sexe":"M","date_naissance":"2006-02-21",
+    "club":1,"points":710
+  }},
+
+  {"model":"competitions.tableau","pk":1,"fields":{
+    "libelle":"Simple -900","date":"2025-12-06","min_points":500,"max_points":900,"is_double":false,"mixte":false,"capacite":64
+  }},
+  {"model":"competitions.tableau","pk":2,"fields":{
+    "libelle":"Toutes séries","date":"2025-12-06","min_points":500,"max_points":4000,"is_double":false,"mixte":false,"capacite":64
+  }},
+  {"model":"competitions.tableau","pk":3,"fields":{
+    "libelle":"Double mixte TS","date":"2025-12-06","min_points":500,"max_points":4000,"is_double":true,"mixte":true,"capacite":64
+  }},
+
+  {"model":"competitions.inscription","pk":1,"fields":{"joueur":1,"tableau":1,"partenaire":null,"statut":"CONFIRMED","created_at":"2025-12-06T08:00:00Z"}},
+  {"model":"competitions.inscription","pk":2,"fields":{"joueur":2,"tableau":1,"partenaire":null,"statut":"CONFIRMED","created_at":"2025-12-06T08:05:00Z"}}
+]
