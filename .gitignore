@@ -7,6 +7,7 @@
 *.pyc
 __pycache__/
 local_settings.py
+*.sqlite3
 db.sqlite3
 db.sqlite3-journal
 media
@@ -561,6 +562,8 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+npm-debug.log*
+package-lock.json
 
 # Visual Studio 6 build log
 *.plg
@@ -674,3 +677,7 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,venv,visualstudio
+
+# --- Tailwind (builds temporaires) ---
+theme/static/css/
+theme/static_src/node_modules/
