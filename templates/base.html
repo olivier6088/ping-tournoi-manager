@@ -32,7 +32,7 @@
            class="font-medium text-sky-800 hover:text-sky-900 underline-offset-4 hover:underline focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-sky-300 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900 rounded-lg px-2 py-1">
           Accueil
         </a>
-        <button id="themeToggle" type="button"
+        <button id="themeToggle" type="button" aria-pressed="false"
                 class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-900 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white
                                dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 dark:focus-visible:ring-offset-slate-900">
           🌙 Sombre
@@ -53,24 +53,31 @@
   </footer>
 
   <script>
-    // Au chargement : préférer le choix mémorisé, sinon réglage système et synchroniser le libellé du bouton
+    // Gestion du thème : synchronise la classe « dark » et le libellé du bouton
     (function () {
-      const saved = localStorage.getItem('theme');         // 'dark' | 'light' | null
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const el = document.documentElement;
-      const initialDark = saved === 'dark' || (!saved && prefersDark);
-      if (initialDark) el.classList.add('dark');
+      const root = document.documentElement;
+      const body = document.body;
       const toggle = document.getElementById('themeToggle');
-      if (toggle) toggle.textContent = initialDark ? '☀️ Clair' : '🌙 Sombre';
-    })();
+      if (!root || !body || !toggle) return;
 
-    // Toggle on click
-    document.getElementById('themeToggle')?.addEventListener('click', function () {
-      const el = document.documentElement;
-      const isDark = el.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      this.textContent = isDark ? '☀️ Clair' : '🌙 Sombre';
-    });
+      const applyTheme = (mode) => {
+        const useDark = mode === 'dark';
+        root.classList.toggle('dark', useDark);
+        body.classList.toggle('dark', useDark); // double sécurité si des styles ciblent directement le body
+        localStorage.setItem('theme', useDark ? 'dark' : 'light');
+        toggle.textContent = useDark ? '☀️ Clair' : '🌙 Sombre';
+        toggle.setAttribute('aria-pressed', String(useDark));
+      };
+
+      const saved = localStorage.getItem('theme'); // 'dark' | 'light' | null
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(saved === 'dark' || (!saved && prefersDark) ? 'dark' : 'light');
+
+      toggle.addEventListener('click', function () {
+        const next = root.classList.contains('dark') ? 'light' : 'dark';
+        applyTheme(next);
+      });
+    })();
   </script>
 
 </body>
