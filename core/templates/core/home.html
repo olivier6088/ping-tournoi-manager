@@ -3,41 +3,23 @@
 {% block content %}
 
 <!-- Deux cartes : créer ou charger un tournoi -->
-<div class="flex flex-col gap-4 md:gap-5">
+<div class="grid gap-4 md:grid-cols-2 md:gap-6 md:min-h-[60vh]">
   <a href="{% url 'admin:competitions_tournoi_add' %}"
-     class="group p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 md:flex md:items-start md:gap-6 md:h-40 no-underline">
-    <div class="flex items-start justify-between mb-3 md:mb-0 md:flex-1">
-      <div>
-        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Nouveau</p>
-        <h3 class="text-lg font-semibold">Créer un nouveau tournoi</h3>
-      </div>
-      <span class="text-xl text-sky-700 transition group-hover:translate-x-1 md:self-center">→</span>
+     class="group flex h-full flex-col justify-between p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 no-underline">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Nouveau</p>
+      <h3 class="text-lg font-semibold">Créer un nouveau tournoi</h3>
     </div>
-    <div class="md:flex md:flex-col md:justify-center md:flex-[2]">
-      <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 md:mb-3">Définissez le nom, la date, le lieu et le nombre de tables pour démarrer un tournoi vierge.</p>
-      <div class="inline-flex items-center gap-2 text-sm font-medium text-sky-800 dark:text-sky-200">
-        Ouvrir le formulaire
-        <span class="text-base">📄</span>
-      </div>
-    </div>
+    <span class="text-xl text-sky-700 transition group-hover:translate-x-1">→</span>
   </a>
 
   <a href="{% url 'admin:competitions_tournoi_changelist' %}"
-     class="group p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 md:flex md:items-start md:gap-6 md:h-40 no-underline">
-    <div class="flex items-start justify-between mb-3 md:mb-0 md:flex-1">
-      <div>
-        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Continuer</p>
-        <h3 class="text-lg font-semibold">Charger un tournoi</h3>
-      </div>
-      <span class="text-xl text-sky-700 transition group-hover:translate-x-1 md:self-center">→</span>
+     class="group flex h-full flex-col justify-between p-6 bg-white rounded-xl shadow border border-slate-100 transition hover:-translate-y-1 hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 no-underline">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Continuer</p>
+      <h3 class="text-lg font-semibold">Charger un tournoi</h3>
     </div>
-    <div class="md:flex md:flex-col md:justify-center md:flex-[2]">
-      <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 md:mb-3">Retrouvez un tournoi existant (créé manuellement ou via YAML/JSON) et poursuivez sa gestion.</p>
-      <div class="inline-flex items-center gap-2 text-sm font-medium text-sky-800 dark:text-sky-200">
-        Voir la liste des tournois
-        <span class="text-base">📂</span>
-      </div>
-    </div>
+    <span class="text-xl text-sky-700 transition group-hover:translate-x-1">→</span>
   </a>
 </div>
 
