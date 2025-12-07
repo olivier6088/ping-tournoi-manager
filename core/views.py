@@ -10,10 +10,13 @@ def home(request):
 
 def create_tournament(request):
     preview = None
-    TableFormSet = formset_factory(TableForm, extra=1, min_num=1, validate_min=True)
+    TableFormSet = formset_factory(TableForm, extra=0, min_num=1, validate_min=True)
 
     form = TournamentForm(request.POST or None)
-    table_formset = TableFormSet(request.POST or None, prefix="tableaux")
+    if request.method == "POST":
+        table_formset = TableFormSet(request.POST, prefix="tableaux")
+    else:
+        table_formset = TableFormSet(prefix="tableaux", initial=[{}])
 
     if request.method == "POST" and form.is_valid() and table_formset.is_valid():
         preview = {
