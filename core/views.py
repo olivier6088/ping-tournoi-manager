@@ -1,6 +1,8 @@
+from django.forms import formset_factory
 from django.shortcuts import render
 
-from .forms import TournamentForm
+from .forms import TableForm, TournamentForm
+
 
 def home(request):
     return render(request, "core/home.html")
@@ -8,13 +10,19 @@ def home(request):
 
 def create_tournament(request):
     preview = None
-    form = TournamentForm(request.POST or None)
+    TableFormSet = formset_factory(TableForm, extra=3, min_num=1, validate_min=True)
 
-    if request.method == "POST" and form.is_valid():
-        preview = form.cleaned_data
+    form = TournamentForm(request.POST or None)
+    table_formset = TableFormSet(request.POST or None, prefix="tableaux")
+
+    if request.method == "POST" and form.is_valid() and table_formset.is_valid():
+        preview = {
+            **form.cleaned_data,
+            "tableaux": [table for table in table_formset.cleaned_data if table],
+        }
 
     return render(
         request,
         "core/create_tournament.html",
-        {"form": form, "preview": preview},
+        {"form": form, "table_formset": table_formset, "preview": preview},
     )

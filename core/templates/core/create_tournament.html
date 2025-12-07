@@ -43,11 +43,40 @@
         {% if form.lieu.errors %}<p class="text-sm text-red-600">{{ form.lieu.errors|join:", " }}</p>{% endif %}
       </div>
 
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="space-y-2">
+          <label for="id_max_simples" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.max_simples.label }}</label>
+          {{ form.max_simples }}
+          {% if form.max_simples.errors %}<p class="text-sm text-red-600">{{ form.max_simples.errors|join:", " }}</p>{% endif %}
+        </div>
+        <div class="space-y-2">
+          <label for="id_max_doubles" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.max_doubles.label }}</label>
+          {{ form.max_doubles }}
+          {% if form.max_doubles.errors %}<p class="text-sm text-red-600">{{ form.max_doubles.errors|join:", " }}</p>{% endif %}
+        </div>
+      </div>
+
       <div class="space-y-2">
-        <label for="id_contraintes" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.contraintes.label }}</label>
-        {{ form.contraintes }}
-        <p class="text-sm text-slate-500 dark:text-slate-400">Indiquez vos règles maison : quotas, anti-club, format des tableaux…</p>
-        {% if form.contraintes.errors %}<p class="text-sm text-red-600">{{ form.contraintes.errors|join:", " }}</p>{% endif %}
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tableaux</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Ajoutez un ou plusieurs tableaux avec leur plafond de classement.</p>
+        {{ table_formset.management_form }}
+        <div class="space-y-4">
+          {% for tableau_form in table_formset %}
+            <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4">
+              <div class="space-y-2">
+                <label for="{{ tableau_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.nom.label }}</label>
+                {{ tableau_form.nom }}
+                {% if tableau_form.nom.errors %}<p class="text-sm text-red-600">{{ tableau_form.nom.errors|join:", " }}</p>{% endif %}
+              </div>
+              <div class="space-y-2">
+                <label for="{{ tableau_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.classement_max.label }}</label>
+                {{ tableau_form.classement_max }}
+                {% if tableau_form.classement_max.errors %}<p class="text-sm text-red-600">{{ tableau_form.classement_max.errors|join:", " }}</p>{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Pour ajouter plus de tableaux, utilisez l’icône « + » du navigateur ou dupliquez la ligne avant validation (amélioration prévue).</p>
       </div>
 
       <div class="flex items-center gap-3">
@@ -69,7 +98,7 @@
     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
       <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Conseils</h3>
       <ul class="list-disc pl-5 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-        <li>Préparez les bornes des tableaux et vos contraintes globales.</li>
+        <li>Préparez les plafonds de classement par tableau.</li>
         <li>Définissez le nombre de tables disponibles pour anticiper le planning.</li>
         <li>Les imports (CSV/YAML) reviendront plus tard, concentrons-nous sur l’expérience.</li>
       </ul>
@@ -97,9 +126,23 @@
         <dt class="font-medium text-slate-700 dark:text-emerald-50">Tables</dt>
         <dd class="text-slate-900 dark:text-emerald-100">{{ preview.nb_tables }}</dd>
       </div>
+      <div>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Simples / Doubles</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">{{ preview.max_simples }} simples max — {{ preview.max_doubles }} doubles max</dd>
+      </div>
       <div class="sm:col-span-2">
-        <dt class="font-medium text-slate-700 dark:text-emerald-50">Contraintes</dt>
-        <dd class="text-slate-900 dark:text-emerald-100 whitespace-pre-line">{{ preview.contraintes|default:"Aucune précision pour le moment." }}</dd>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Tableaux</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">
+          {% if preview.tableaux %}
+            <ul class="space-y-1 list-disc pl-5">
+              {% for tableau in preview.tableaux %}
+                <li>{{ tableau.nom }} — classement max {{ tableau.classement_max }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            Aucun tableau saisi pour le moment.
+          {% endif %}
+        </dd>
       </div>
     </dl>
     <p class="mt-4 text-sm text-emerald-800 dark:text-emerald-200">Étape suivante : connecter ce formulaire à la future couche de persistance.</p>
