@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 from datetime import datetime
 
 from django.contrib import messages
@@ -54,7 +55,7 @@ def _parse_date(value):
     raise ValueError("format de date invalide")
 
 
-def _parse_players_csv(file_obj, tables_by_name):
+def _parse_players_csv(file_obj, tables_by_code):
     content = file_obj.read().decode("utf-8-sig")
     if not content:
         return [], ["Le fichier est vide."]
@@ -71,10 +72,13 @@ def _parse_players_csv(file_obj, tables_by_name):
         "club",
         "points",
         "date_naissance",
-        "tableau",
     }
 
-    missing = required_fields - set(reader.fieldnames or [])
+    fieldnames = set(reader.fieldnames or [])
+    missing = (required_fields | {"tableaux"}) - fieldnames
+    if missing and "tableau" in fieldnames:
+        missing.discard("tableaux")
+
     if missing:
         return [], [f"Colonnes manquantes : {', '.join(sorted(missing))}."]
 
@@ -89,18 +93,23 @@ def _parse_players_csv(file_obj, tables_by_name):
             club = row.get("club", "").strip()
             points_raw = row.get("points", "0").replace(" ", "")
             date_value = row.get("date_naissance", "").strip()
-            tableau_name = row.get("tableau", "").strip()
+            tableau_raw = row.get("tableaux") or row.get("tableau") or ""
+            tableau_raw = tableau_raw.strip()
 
             if not licence or not nom or not prenom or sexe not in {"M", "F"}:
                 raise ValueError("Champs obligatoires manquants ou sexe invalide")
 
-            tableau = None
-            if tableau_name:
-                tableau = tables_by_name.get(tableau_name.lower())
-                if not tableau:
-                    raise ValueError(
-                        f"tableau inconnu : {tableau_name}. Utilisez les noms existants."
-                    )
+            tableaux = []
+            if tableau_raw:
+                codes = [code.strip() for code in re.split(r"[|,]", tableau_raw) if code.strip()]
+                for code in codes:
+                    tableau = tables_by_code.get(code.lower())
+                    if not tableau:
+                        raise ValueError(
+                            f"tableau inconnu : {code}. Utilisez les identifiants fournis."
+                        )
+                    if tableau not in tableaux:
+                        tableaux.append(tableau)
 
             parsed.append(
                 {
@@ -111,7 +120,7 @@ def _parse_players_csv(file_obj, tables_by_name):
                     "club": club,
                     "points": int(points_raw or 0),
                     "date_naissance": _parse_date(date_value) if date_value else None,
-                    "tableau": tableau,
+                    "tableaux": tableaux,
                 }
             )
         except Exception as exc:  # noqa: BLE001
@@ -123,13 +132,13 @@ def _parse_players_csv(file_obj, tables_by_name):
 def tournament_detail(request, pk):
     tournament = get_object_or_404(Tournament, pk=pk)
     tables = list(tournament.tableaux.all())
-    players = tournament.players.select_related("tableau").all()
+    players = tournament.players.prefetch_related("tableaux").all()
     import_form = PlayerImportForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST" and import_form.is_valid():
-        tables_by_name = {table.nom.lower(): table for table in tables}
+        tables_by_code = {table.code.lower(): table for table in tables}
         players_data, errors = _parse_players_csv(
-            import_form.cleaned_data["fichier"], tables_by_name
+            import_form.cleaned_data["fichier"], tables_by_code
         )
 
         if errors:
@@ -137,7 +146,7 @@ def tournament_detail(request, pk):
                 messages.error(request, error)
         else:
             for data in players_data:
-                Player.objects.update_or_create(
+                player, _ = Player.objects.update_or_create(
                     tournament=tournament,
                     licence=data["licence"],
                     defaults={
@@ -147,9 +156,9 @@ def tournament_detail(request, pk):
                         "club": data["club"],
                         "points": data["points"],
                         "date_naissance": data["date_naissance"],
-                        "tableau": data["tableau"],
                     },
                 )
+                player.tableaux.set(data["tableaux"])
 
             messages.success(
                 request,

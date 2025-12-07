@@ -83,6 +83,11 @@
                 {% if tableau_form.nom.errors %}<p class="text-sm text-red-600">{{ tableau_form.nom.errors|join:", " }}</p>{% endif %}
               </div>
               <div class="space-y-2">
+                <label for="{{ tableau_form.code.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Identifiant (utilisé dans le CSV)</label>
+                {{ tableau_form.code }}
+                {% if tableau_form.code.errors %}<p class="text-sm text-red-600">{{ tableau_form.code.errors|join:", " }}</p>{% endif %}
+              </div>
+              <div class="space-y-2">
                 <label for="{{ tableau_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.classement_max.label }}</label>
                 {{ tableau_form.classement_max }}
                 {% if tableau_form.classement_max.errors %}<p class="text-sm text-red-600">{{ tableau_form.classement_max.errors|join:", " }}</p>{% endif %}
@@ -113,6 +118,10 @@
             <div class="space-y-2">
               <label for="{{ table_formset.empty_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.nom.label }}</label>
               {{ table_formset.empty_form.nom }}
+            </div>
+            <div class="space-y-2">
+              <label for="{{ table_formset.empty_form.code.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Identifiant (utilisé dans le CSV)</label>
+              {{ table_formset.empty_form.code }}
             </div>
             <div class="space-y-2">
               <label for="{{ table_formset.empty_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.classement_max.label }}</label>
@@ -191,12 +200,12 @@
       <div class="sm:col-span-2">
         <dt class="font-medium text-slate-700 dark:text-emerald-50">Tableaux</dt>
         <dd class="text-slate-900 dark:text-emerald-100">
-          {% if preview.tableaux %}
-            <ul class="space-y-1 list-disc pl-5">
-              {% for tableau in preview.tableaux %}
-                <li>{{ tableau.nom }} — classement max {{ tableau.classement_max }}</li>
-              {% endfor %}
-            </ul>
+              {% if preview.tableaux %}
+                <ul class="space-y-1 list-disc pl-5">
+                  {% for tableau in preview.tableaux %}
+                    <li>{{ tableau.nom }} ({{ tableau.code }}) — classement max {{ tableau.classement_max }}</li>
+                  {% endfor %}
+                </ul>
           {% else %}
             Aucun tableau saisi pour le moment.
           {% endif %}

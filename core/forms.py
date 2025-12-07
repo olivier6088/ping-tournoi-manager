@@ -58,12 +58,20 @@ class TournamentForm(forms.ModelForm):
 class TableForm(forms.ModelForm):
     class Meta:
         model = Table
-        fields = ["nom", "classement_max"]
+        fields = ["nom", "code", "classement_max"]
         widgets = {
             "nom": forms.TextInput(
                 attrs={
                     "placeholder": "Ex. Tableau A",
                     "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "code": forms.TextInput(
+                attrs={
+                    "placeholder": "Ex. A1200",
+                    "class": COMMON_INPUT_CLASSES,
+                    "pattern": "[A-Za-z0-9_-]+",
+                    "title": "Utilisez des lettres, chiffres, tirets ou underscores",
                 }
             ),
             "classement_max": forms.NumberInput(
@@ -83,5 +91,8 @@ class PlayerImportForm(forms.Form):
         widget=forms.ClearableFileInput(
             attrs={"class": "block w-full text-sm text-slate-700 dark:text-slate-200"}
         ),
-        help_text="Le fichier doit contenir les colonnes licence, nom, prenom, sexe, club, points, date_naissance et tableau.",
+        help_text=(
+            "Colonnes requises : licence, nom, prenom, sexe, club, points, "
+            "date_naissance et tableaux (identifiants séparés par |)."
+        ),
     )

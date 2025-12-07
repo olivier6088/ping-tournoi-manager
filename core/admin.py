@@ -12,9 +12,9 @@ class TournamentAdmin(admin.ModelAdmin):
 
 @admin.register(Table)
 class TableAdmin(admin.ModelAdmin):
-    list_display = ("nom", "classement_max", "tournament")
+    list_display = ("nom", "code", "classement_max", "tournament")
     list_filter = ("tournament",)
-    search_fields = ("nom", "tournament__nom")
+    search_fields = ("nom", "code", "tournament__nom")
 
 
 @admin.register(Player)
@@ -26,7 +26,12 @@ class PlayerAdmin(admin.ModelAdmin):
         "club",
         "points",
         "tournament",
-        "tableau",
+        "tableaux_list",
     )
-    list_filter = ("tournament", "tableau")
+    list_filter = ("tournament",)
     search_fields = ("licence", "nom", "prenom", "club")
+    filter_horizontal = ("tableaux",)
+
+    @admin.display(description="Tableaux")
+    def tableaux_list(self, obj):
+        return ", ".join(obj.tableaux.values_list("code", flat=True))

@@ -25,6 +25,7 @@ class TournamentFlowTests(TestCase):
             "max_doubles": 1,
             "action": "save",
             "tableaux-0-nom": "Tableau A",
+            "tableaux-0-code": "A1200",
             "tableaux-0-classement_max": 1200,
         }
         data.update(self._formset_management_data(total=1))
@@ -47,12 +48,12 @@ class TournamentFlowTests(TestCase):
             max_doubles=1,
         )
         table = Table.objects.create(
-            tournament=tournament, nom="Tableau A", classement_max=1300
+            tournament=tournament, nom="Tableau A", code="A1300", classement_max=1300
         )
 
         csv_content = (
-            "licence;nom;prenom;sexe;club;points;date_naissance;tableau\n"
-            "9999;Doe;Jane;F;Club Test;900;1990-01-01;Tableau A\n"
+            "licence;nom;prenom;sexe;club;points;date_naissance;tableaux\n"
+            "9999;Doe;Jane;F;Club Test;900;1990-01-01;A1300\n"
         )
         upload = SimpleUploadedFile(
             "joueurs.csv", csv_content.encode("utf-8"), content_type="text/csv"
@@ -65,4 +66,4 @@ class TournamentFlowTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         player = Player.objects.get(licence="9999", tournament=tournament)
-        self.assertEqual(player.tableau, table)
+        self.assertEqual(list(player.tableaux.all()), [table])

@@ -1,33 +1,33 @@
-licence,nom,prenom,sexe,club,points,date_naissance,tableau
-100001,Dupont,Louis,M,Club Aiglons,1180,1995-03-12,Tableau -1200
-100002,Martin,Paul,M,TT Lyon,1120,1990-07-08,Tableau -1200
-100003,Bernard,Hugo,M,Ping Paris,950,1989-11-02,Tableau -900
-100004,Petit,Emma,F,Nice Smash,870,1992-04-17,Tableau -900
-100005,Robert,Maxime,M,Club Aiglons,1195,1988-12-30,Tableau -1200
-100006,Richard,Luc,M,TT Lyon,1050,1998-06-22,Tableau -900
-100007,Durand,Lucas,M,Ping Paris,980,1994-01-19,Tableau -1200
-100008,Moreau,Chloé,F,Nice Smash,900,1999-09-14,Tableau -900
-100009,Simon,Thomas,M,Club Aiglons,1080,1993-05-05,Tableau -1200
-100010,Laurent,Camille,M,TT Lyon,890,1996-02-10,Tableau -900
-100011,Lefebvre,Julien,M,Ping Paris,1010,1985-08-27,Tableau -1200
-100012,Michel,Sarah,F,Nice Smash,930,1987-03-03,Tableau -900
-100013,Garcia,Antoine,M,Club Aiglons,1150,1986-10-21,Tableau -1200
-100014,David,Marc,M,TT Lyon,820,1997-12-09,Tableau -900
-100015,Bertrand,Alexis,M,Ping Paris,990,1991-07-30,Tableau -1200
-100016,Roux,Pierre,M,Nice Smash,880,1990-01-25,Tableau -900
-100017,Leroy,Nathan,M,Club Aiglons,760,2010-06-18,Tableau -1200
-100018,Morel,Lucas,M,TT Lyon,720,2012-09-09,Tableau -900
-100019,Fournier,Jeanne,F,Ping Paris,680,2011-11-23,Tableau -900
-100020,Girard,Leo,M,Nice Smash,740,2013-04-12,Tableau -1200
-100021,Andre,Clara,F,Club Aiglons,700,2014-02-07,Tableau -900
-100022,Mercier,Adam,M,TT Lyon,710,2009-08-16,Tableau -1200
-100023,Dupuis,Ethan,M,Ping Paris,650,2015-12-28,Tableau -900
-100024,Lambert,Zoe,F,Nice Smash,690,2010-05-19,Tableau -1200
-100025,Bonnet,Hugo,M,Club Aiglons,730,2011-03-30,Tableau -900
-100026,Francois,Jules,M,TT Lyon,760,2012-01-04,Tableau -1200
-100027,Martinez,Sacha,M,Ping Paris,705,2013-07-22,Tableau -900
-100028,Legrand,Enzo,M,Nice Smash,715,2014-10-02,Tableau -1200
-100029,Gauthier,Victor,M,Club Aiglons,735,2015-09-11,Tableau -900
-100030,Garcia,Tom,M,TT Lyon,725,2010-12-06,Tableau -1200
-100031,Perrin,Theo,M,Ping Paris,695,2016-02-18,Tableau -900
-100032,Robin,Paul,M,Nice Smash,745,2009-11-27,Tableau -1200
+licence,nom,prenom,sexe,club,points,date_naissance,tableaux
+100001,Dupont,Louis,M,Club Aiglons,1180,1995-03-12,T1200
+100002,Martin,Paul,M,TT Lyon,1120,1990-07-08,T1200
+100003,Bernard,Hugo,M,Ping Paris,950,1989-11-02,T900|T1200
+100004,Petit,Emma,F,Nice Smash,870,1992-04-17,T900
+100005,Robert,Maxime,M,Club Aiglons,1195,1988-12-30,T1200
+100006,Richard,Luc,M,TT Lyon,1050,1998-06-22,T900|T1200
+100007,Durand,Lucas,M,Ping Paris,980,1994-01-19,T1200
+100008,Moreau,Chloé,F,Nice Smash,900,1999-09-14,T900|T1200
+100009,Simon,Thomas,M,Club Aiglons,1080,1993-05-05,T1200
+100010,Laurent,Camille,M,TT Lyon,890,1996-02-10,T900
+100011,Lefebvre,Julien,M,Ping Paris,1010,1985-08-27,T1200
+100012,Michel,Sarah,F,Nice Smash,930,1987-03-03,T900|T1200
+100013,Garcia,Antoine,M,Club Aiglons,1150,1986-10-21,T1200
+100014,David,Marc,M,TT Lyon,820,1997-12-09,T900
+100015,Bertrand,Alexis,M,Ping Paris,990,1991-07-30,T1200
+100016,Roux,Pierre,M,Nice Smash,880,1990-01-25,T900
+100017,Leroy,Nathan,M,Club Aiglons,760,2010-06-18,T1200
+100018,Morel,Lucas,M,TT Lyon,720,2012-09-09,T900
+100019,Fournier,Jeanne,F,Ping Paris,680,2011-11-23,T900
+100020,Girard,Leo,M,Nice Smash,740,2013-04-12,T1200
+100021,Andre,Clara,F,Club Aiglons,700,2014-02-07,T900
+100022,Mercier,Adam,M,TT Lyon,710,2009-08-16,T1200
+100023,Dupuis,Ethan,M,Ping Paris,650,2015-12-28,T900
+100024,Lambert,Zoe,F,Nice Smash,690,2010-05-19,T1200
+100025,Bonnet,Hugo,M,Club Aiglons,730,2011-03-30,T900
+100026,Francois,Jules,M,TT Lyon,760,2012-01-04,T1200
+100027,Martinez,Sacha,M,Ping Paris,705,2013-07-22,T900
+100028,Legrand,Enzo,M,Nice Smash,715,2014-10-02,T1200
+100029,Gauthier,Victor,M,Club Aiglons,735,2015-09-11,T900
+100030,Garcia,Tom,M,TT Lyon,725,2010-12-06,T1200
+100031,Perrin,Theo,M,Ping Paris,695,2016-02-18,T900
+100032,Robin,Paul,M,Nice Smash,745,2009-11-27,T1200

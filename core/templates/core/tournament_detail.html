@@ -14,7 +14,7 @@
       <div class="flex items-center justify-between gap-4 mb-4">
         <div>
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Tableaux</h2>
-          <p class="text-sm text-slate-600 dark:text-slate-400">Affectez les joueurs en utilisant le nom exact du tableau dans le CSV.</p>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Affectez les joueurs via l'identifiant de tableau indiqué ci-dessous (colonnes «&nbsp;tableaux&nbsp;» du CSV).</p>
         </div>
         <a href="{% url 'create_tournament' %}"
            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
@@ -26,7 +26,7 @@
           {% for table in tables %}
             <li class="py-3 flex items-center justify-between">
               <div>
-                <p class="font-semibold text-slate-900 dark:text-white">{{ table.nom }}</p>
+                <p class="font-semibold text-slate-900 dark:text-white">{{ table.nom }} <span class="text-xs text-slate-500 dark:text-slate-400">({{ table.code }})</span></p>
                 <p class="text-sm text-slate-600 dark:text-slate-400">Classement max {{ table.classement_max }}</p>
               </div>
               <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200">{{ table.players.count }} joueurs</span>
@@ -50,7 +50,7 @@
                 <th class="py-2 pr-4">Prénom</th>
                 <th class="py-2 pr-4">Club</th>
                 <th class="py-2 pr-4">Points</th>
-                <th class="py-2 pr-4">Tableau</th>
+                <th class="py-2 pr-4">Tableaux</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -61,7 +61,17 @@
                   <td class="py-2 pr-4 whitespace-nowrap">{{ player.prenom }}</td>
                   <td class="py-2 pr-4 whitespace-nowrap">{{ player.club }}</td>
                   <td class="py-2 pr-4 whitespace-nowrap">{{ player.points }}</td>
-                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.tableau.nom|default:"Non affecté" }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">
+                    {% with player.tableaux.all as tables %}
+                      {% if tables %}
+                        {% for table in tables %}
+                          <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-700 dark:text-slate-100">{{ table.code }}</span>{% if not forloop.last %} {% endif %}
+                        {% endfor %}
+                      {% else %}
+                        Non affecté
+                      {% endif %}
+                    {% endwith %}
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -76,7 +86,7 @@
   <aside class="space-y-4">
     <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Importer des joueurs</h2>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Téléversez un fichier CSV contenant les colonnes&nbsp;: licence, nom, prenom, sexe, club, points, date_naissance et tableau (nom du tableau créé ci-dessus).</p>
+      <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Téléversez un fichier CSV contenant les colonnes&nbsp;: licence, nom, prenom, sexe, club, points, date_naissance et tableaux (identifiants séparés par |).</p>
       <form method="post" enctype="multipart/form-data" class="space-y-4">
         {% csrf_token %}
         <div class="space-y-2">
@@ -98,7 +108,7 @@
     <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-900 text-white p-5">
       <h3 class="text-lg font-semibold mb-2">Astuces</h3>
       <ul class="list-disc pl-5 space-y-1 text-sm text-slate-100/90">
-        <li>Le champ « tableau » doit correspondre au nom exact d'un tableau.</li>
+        <li>Le champ « tableaux » doit contenir les identifiants listés ci-dessus, séparés par |.</li>
         <li>Les entrées existantes sont mises à jour si la licence est déjà importée.</li>
         <li>Les dates acceptent les formats AAAA-MM-JJ ou JJ/MM/AAAA.</li>
       </ul>

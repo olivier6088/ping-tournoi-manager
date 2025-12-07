@@ -23,10 +23,12 @@ class Table(models.Model):
         Tournament, related_name="tableaux", on_delete=models.CASCADE
     )
     nom = models.CharField(max_length=80)
+    code = models.SlugField(max_length=50)
     classement_max = models.PositiveIntegerField()
 
     class Meta:
         ordering = ["nom"]
+        unique_together = [("tournament", "code")]
 
     def __str__(self):
         return f"{self.nom} ({self.tournament.nom})"
@@ -35,9 +37,6 @@ class Table(models.Model):
 class Player(models.Model):
     tournament = models.ForeignKey(
         Tournament, related_name="players", on_delete=models.CASCADE
-    )
-    tableau = models.ForeignKey(
-        Table, related_name="players", on_delete=models.SET_NULL, null=True, blank=True
     )
     licence = models.CharField(max_length=20)
     nom = models.CharField(max_length=120)
@@ -48,6 +47,7 @@ class Player(models.Model):
     club = models.CharField(max_length=120, blank=True)
     points = models.PositiveIntegerField(default=0)
     date_naissance = models.DateField(null=True, blank=True)
+    tableaux = models.ManyToManyField(Table, related_name="players", blank=True)
 
     class Meta:
         ordering = ["nom", "prenom"]
