@@ -45,12 +45,11 @@ class TournamentForm(forms.Form):
             }
         ),
     )
-    max_simples = forms.TypedChoiceField(
+    max_simples = forms.IntegerField(
         label="Nombre maximum de simples par joueur",
-        coerce=int,
-        choices=[(1, "1 simple"), (2, "2 simples"), (3, "3 simples"), (4, "4 simples")],
+        min_value=0,
         initial=2,
-        widget=forms.Select(
+        widget=forms.NumberInput(
             attrs={
                 "class": COMMON_INPUT_CLASSES,
             }

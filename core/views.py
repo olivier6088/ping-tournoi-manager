@@ -10,7 +10,7 @@ def home(request):
 
 def create_tournament(request):
     preview = None
-    TableFormSet = formset_factory(TableForm, extra=3, min_num=1, validate_min=True)
+    TableFormSet = formset_factory(TableForm, extra=1, min_num=1, validate_min=True)
 
     form = TournamentForm(request.POST or None)
     table_formset = TableFormSet(request.POST or None, prefix="tableaux")

@@ -58,11 +58,17 @@
 
       <div class="space-y-2">
         <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tableaux</h3>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Ajoutez un ou plusieurs tableaux avec leur plafond de classement.</p>
+        <div class="flex items-center justify-between gap-4">
+          <p class="text-sm text-slate-600 dark:text-slate-400">Ajoutez un ou plusieurs tableaux avec leur plafond de classement.</p>
+          <button type="button" data-action="add-table" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
+            <span class="text-lg" aria-hidden="true">+</span>
+            Ajouter un tableau
+          </button>
+        </div>
         {{ table_formset.management_form }}
-        <div class="space-y-4">
+        <div class="space-y-4" data-table-formset>
           {% for tableau_form in table_formset %}
-            <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4">
+            <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4" data-table-form>
               <div class="space-y-2">
                 <label for="{{ tableau_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.nom.label }}</label>
                 {{ tableau_form.nom }}
@@ -73,10 +79,38 @@
                 {{ tableau_form.classement_max }}
                 {% if tableau_form.classement_max.errors %}<p class="text-sm text-red-600">{{ tableau_form.classement_max.errors|join:", " }}</p>{% endif %}
               </div>
+              <div class="flex flex-wrap items-center gap-3">
+                <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="validate-table">
+                  Valider ce tableau
+                </button>
+                <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-900/30" data-action="remove-table">
+                  Supprimer
+                </button>
+              </div>
             </div>
           {% endfor %}
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Pour ajouter plus de tableaux, utilisez l’icône « + » du navigateur ou dupliquez la ligne avant validation (amélioration prévue).</p>
+        <template id="empty-table-form-template">
+          <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4" data-table-form>
+            <div class="space-y-2">
+              <label for="{{ table_formset.empty_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.nom.label }}</label>
+              {{ table_formset.empty_form.nom }}
+            </div>
+            <div class="space-y-2">
+              <label for="{{ table_formset.empty_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.classement_max.label }}</label>
+              {{ table_formset.empty_form.classement_max }}
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="validate-table">
+                Valider ce tableau
+              </button>
+              <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-900/30" data-action="remove-table">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </template>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Ajoutez, validez ou supprimez vos tableaux avant d’envoyer le formulaire.</p>
       </div>
 
       <div class="flex items-center gap-3">
@@ -148,5 +182,75 @@
     <p class="mt-4 text-sm text-emerald-800 dark:text-emerald-200">Étape suivante : connecter ce formulaire à la future couche de persistance.</p>
   </section>
 {% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const formsetContainer = document.querySelector('[data-table-formset]');
+    const addButton = document.querySelector('[data-action="add-table"]');
+    const template = document.querySelector('#empty-table-form-template');
+    const totalFormsInput = document.querySelector('#id_tableaux-TOTAL_FORMS');
+    const formsetPrefixPattern = /tableaux-\d+-/g;
+
+    if (!formsetContainer || !addButton || !template || !totalFormsInput) {
+      return;
+    }
+
+    const updateFormIndices = () => {
+      const forms = Array.from(formsetContainer.querySelectorAll('[data-table-form]'));
+      forms.forEach((formEl, index) => {
+        formEl.querySelectorAll('input, select, textarea').forEach((field) => {
+          if (field.name) field.name = field.name.replace(formsetPrefixPattern, `tableaux-${index}-`);
+          if (field.id) field.id = field.id.replace(formsetPrefixPattern, `tableaux-${index}-`);
+        });
+
+        formEl.querySelectorAll('label[for]').forEach((label) => {
+          const currentFor = label.getAttribute('for');
+          if (currentFor) label.setAttribute('for', currentFor.replace(formsetPrefixPattern, `tableaux-${index}-`));
+        });
+      });
+
+      totalFormsInput.value = forms.length;
+    };
+
+    const validateTableBlock = (block) => {
+      const inputs = block.querySelectorAll('input, select, textarea');
+      for (const field of inputs) {
+        if (!field.reportValidity()) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    addButton.addEventListener('click', () => {
+      const clone = template.content.cloneNode(true);
+      formsetContainer.appendChild(clone);
+      updateFormIndices();
+    });
+
+    formsetContainer.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-action]');
+      if (!action) return;
+
+      const block = action.closest('[data-table-form]');
+      if (!block) return;
+
+      if (action.dataset.action === 'remove-table') {
+        const existingBlocks = formsetContainer.querySelectorAll('[data-table-form]');
+        if (existingBlocks.length <= 1) {
+          return;
+        }
+        block.remove();
+        updateFormIndices();
+      }
+
+      if (action.dataset.action === 'validate-table') {
+        validateTableBlock(block);
+      }
+    });
+
+    updateFormIndices();
+  });
+</script>
 
 {% endblock %}
