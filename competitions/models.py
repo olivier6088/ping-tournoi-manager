@@ -1,8 +1,35 @@
+from datetime import date
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from datetime import date
-from django.core.exceptions import ValidationError
+
+
+class Tournoi(models.Model):
+    nom = models.CharField(max_length=120)
+    date = models.DateField()
+    lieu = models.CharField(max_length=120, blank=True)
+    nb_tables = models.PositiveIntegerField(default=16)
+    contraintes = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-date", "nom"]
+        unique_together = [("nom", "date")]
+        verbose_name = "Tournoi"
+        verbose_name_plural = "Tournois"
+        constraints = [
+            models.CheckConstraint(
+                name="tournoi_nb_tables_positive",
+                condition=Q(nb_tables__gte=1),
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.nom} ({self.date})"
+
 
 class Club(models.Model):
     code = models.CharField(max_length=10, unique=True)
@@ -63,6 +90,13 @@ class Joueur(models.Model):
 
 
 class Tableau(models.Model):
+    tournoi = models.ForeignKey(
+        "Tournoi",
+        on_delete=models.CASCADE,
+        related_name="tableaux",
+        null=True,
+        blank=True,
+    )
     libelle = models.CharField(max_length=100)
     date = models.DateField(default=timezone.now)
     min_points = models.PositiveIntegerField(default=500)
@@ -91,7 +125,8 @@ class Tableau(models.Model):
     def __str__(self):
         p = f" [{self.min_points}-{self.max_points}]"
         cap = f" (cap {self.capacite})" if self.capacite else ""
-        return f"{self.libelle}{p}{cap}"
+        tournoi = f" — {self.tournoi.nom}" if self.tournoi else ""
+        return f"{self.libelle}{p}{cap}{tournoi}"
 
 class Inscription(models.Model):
     """

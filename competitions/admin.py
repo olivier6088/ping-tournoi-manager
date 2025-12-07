@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Club, Joueur, Tableau, Inscription
+from .models import Club, Inscription, Joueur, Tableau, Tournoi
+
+
+@admin.register(Tournoi)
+class TournoiAdmin(admin.ModelAdmin):
+    list_display = ("nom", "date", "lieu", "nb_tables")
+    search_fields = ("nom", "lieu")
+    list_filter = ("date",)
 
 @admin.register(Club)
 class ClubAdmin(admin.ModelAdmin):
