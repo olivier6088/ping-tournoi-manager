@@ -32,6 +32,10 @@
            class="font-medium text-sky-800 hover:text-sky-900 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-sky-300 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900 rounded-lg px-2 py-1 no-underline">
           Accueil
         </a>
+        <a href="{% url 'create_tournament' %}"
+           class="font-medium text-slate-800 hover:text-slate-900 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-200 dark:hover:text-white dark:focus-visible:ring-offset-slate-900 rounded-lg px-2 py-1 no-underline">
+          Nouveau tournoi
+        </a>
         <a href="{% url 'admin:index' %}"
            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-700 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus-visible:ring-offset-slate-900 no-underline">
           <span class="text-xs">⚙️</span> Accès admin
