@@ -56,9 +56,11 @@
       </div>
 
       <div class="space-y-2">
-        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tableaux</h3>
         <div class="flex items-center justify-between gap-4">
-          <p class="text-sm text-slate-600 dark:text-slate-400">Ajoutez un ou plusieurs tableaux avec leur plafond de classement.</p>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tableaux</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Gérez vos tableaux avant l’enregistrement final.</p>
+          </div>
           <button type="button" data-action="add-table" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
             <span class="text-lg" aria-hidden="true">+</span>
             Ajouter un tableau
@@ -68,6 +70,13 @@
         <div class="space-y-4" data-table-formset>
           {% for tableau_form in table_formset %}
             <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4" data-table-form>
+              <div class="flex items-start justify-between gap-4">
+                <div class="space-y-1">
+                  <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Tableau</p>
+                  <p class="text-sm text-slate-600 dark:text-slate-400" data-table-summary>Complétez les champs ci-dessous.</p>
+                </div>
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200" data-table-status>En cours de saisie</span>
+              </div>
               <div class="space-y-2">
                 <label for="{{ tableau_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.nom.label }}</label>
                 {{ tableau_form.nom }}
@@ -79,8 +88,11 @@
                 {% if tableau_form.classement_max.errors %}<p class="text-sm text-red-600">{{ tableau_form.classement_max.errors|join:", " }}</p>{% endif %}
               </div>
               <div class="flex flex-wrap items-center gap-3">
-                <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="validate-table">
-                  Valider ce tableau
+                <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="save-table">
+                  Enregistrer ce tableau
+                </button>
+                <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700 hidden" data-action="edit-table">
+                  Modifier
                 </button>
                 <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-900/30" data-action="remove-table">
                   Supprimer
@@ -91,6 +103,13 @@
         </div>
         <template id="empty-table-form-template">
           <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4" data-table-form>
+            <div class="flex items-start justify-between gap-4">
+              <div class="space-y-1">
+                <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Tableau</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400" data-table-summary>Complétez les champs ci-dessous.</p>
+              </div>
+              <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200" data-table-status>En cours de saisie</span>
+            </div>
             <div class="space-y-2">
               <label for="{{ table_formset.empty_form.nom.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.nom.label }}</label>
               {{ table_formset.empty_form.nom }}
@@ -100,8 +119,11 @@
               {{ table_formset.empty_form.classement_max }}
             </div>
             <div class="flex flex-wrap items-center gap-3">
-              <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="validate-table">
-                Valider ce tableau
+              <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400" data-action="save-table">
+                Enregistrer ce tableau
+              </button>
+              <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700 hidden" data-action="edit-table">
+                Modifier
               </button>
               <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-900/30" data-action="remove-table">
                 Supprimer
@@ -220,10 +242,50 @@
       return true;
     };
 
+    const updateBlockSummary = (block) => {
+      const nameInput = block.querySelector('[name$="-nom"]');
+      const rankingInput = block.querySelector('[name$="-classement_max"]');
+      const summaryEl = block.querySelector('[data-table-summary]');
+      const statusEl = block.querySelector('[data-table-status]');
+      const saveButton = block.querySelector('[data-action="save-table"]');
+      const editButton = block.querySelector('[data-action="edit-table"]');
+
+      if (!nameInput || !rankingInput || !summaryEl || !statusEl || !saveButton || !editButton) {
+        return;
+      }
+
+      const hasContent = Boolean(nameInput.value || rankingInput.value);
+
+      if (block.dataset.state === 'saved' && hasContent) {
+        summaryEl.textContent = `${nameInput.value || 'Tableau'} — classement max ${rankingInput.value || 'à définir'}`;
+        statusEl.textContent = 'Enregistré';
+        statusEl.className = 'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100';
+        saveButton.classList.add('hidden');
+        editButton.classList.remove('hidden');
+        nameInput.readOnly = true;
+        rankingInput.readOnly = true;
+        nameInput.classList.add('bg-slate-50', 'dark:bg-slate-900/50');
+        rankingInput.classList.add('bg-slate-50', 'dark:bg-slate-900/50');
+      } else {
+        summaryEl.textContent = 'Complétez les champs ci-dessous.';
+        statusEl.textContent = 'En cours de saisie';
+        statusEl.className = 'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200';
+        saveButton.classList.remove('hidden');
+        saveButton.textContent = hasContent ? 'Mettre à jour' : 'Enregistrer ce tableau';
+        editButton.classList.add('hidden');
+        nameInput.readOnly = false;
+        rankingInput.readOnly = false;
+        nameInput.classList.remove('bg-slate-50', 'dark:bg-slate-900/50');
+        rankingInput.classList.remove('bg-slate-50', 'dark:bg-slate-900/50');
+      }
+    };
+
     addButton.addEventListener('click', () => {
       const clone = template.content.cloneNode(true);
       formsetContainer.appendChild(clone);
       updateFormIndices();
+      const newBlock = formsetContainer.querySelector('[data-table-form]:last-of-type');
+      updateBlockSummary(newBlock);
     });
 
     formsetContainer.addEventListener('click', (event) => {
@@ -242,12 +304,21 @@
         updateFormIndices();
       }
 
-      if (action.dataset.action === 'validate-table') {
-        validateTableBlock(block);
+      if (action.dataset.action === 'save-table') {
+        if (validateTableBlock(block)) {
+          block.dataset.state = 'saved';
+          updateBlockSummary(block);
+        }
+      }
+
+      if (action.dataset.action === 'edit-table') {
+        block.dataset.state = 'draft';
+        updateBlockSummary(block);
       }
     });
 
     updateFormIndices();
+    formsetContainer.querySelectorAll('[data-table-form]').forEach(updateBlockSummary);
   });
 </script>
 
