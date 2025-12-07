@@ -83,6 +83,11 @@
                 {% if tableau_form.nom.errors %}<p class="text-sm text-red-600">{{ tableau_form.nom.errors|join:", " }}</p>{% endif %}
               </div>
               <div class="space-y-2">
+                <label for="{{ tableau_form.code.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Identifiant (utilisé dans le CSV)</label>
+                {{ tableau_form.code }}
+                {% if tableau_form.code.errors %}<p class="text-sm text-red-600">{{ tableau_form.code.errors|join:", " }}</p>{% endif %}
+              </div>
+              <div class="space-y-2">
                 <label for="{{ tableau_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ tableau_form.classement_max.label }}</label>
                 {{ tableau_form.classement_max }}
                 {% if tableau_form.classement_max.errors %}<p class="text-sm text-red-600">{{ tableau_form.classement_max.errors|join:", " }}</p>{% endif %}
@@ -115,6 +120,10 @@
               {{ table_formset.empty_form.nom }}
             </div>
             <div class="space-y-2">
+              <label for="{{ table_formset.empty_form.code.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Identifiant (utilisé dans le CSV)</label>
+              {{ table_formset.empty_form.code }}
+            </div>
+            <div class="space-y-2">
               <label for="{{ table_formset.empty_form.classement_max.id_for_label }}" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ table_formset.empty_form.classement_max.label }}</label>
               {{ table_formset.empty_form.classement_max }}
             </div>
@@ -133,12 +142,16 @@
         </template>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button type="submit"
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="submit" name="action" value="save"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm hover:bg-emerald-500 focus:outline-none focus-visible:ring focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
+          Enregistrer le tournoi
+        </button>
+        <button type="submit" name="action" value="preview"
           class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-sky-600 text-white font-semibold shadow-sm hover:bg-sky-500 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
           Prévisualiser
         </button>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Validation front uniquement pour l’instant.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Une fois sauvegardé, vous pourrez importer un CSV de joueurs et les affecter à leurs tableaux.</p>
       </div>
     </form>
   </section>
@@ -187,12 +200,12 @@
       <div class="sm:col-span-2">
         <dt class="font-medium text-slate-700 dark:text-emerald-50">Tableaux</dt>
         <dd class="text-slate-900 dark:text-emerald-100">
-          {% if preview.tableaux %}
-            <ul class="space-y-1 list-disc pl-5">
-              {% for tableau in preview.tableaux %}
-                <li>{{ tableau.nom }} — classement max {{ tableau.classement_max }}</li>
-              {% endfor %}
-            </ul>
+              {% if preview.tableaux %}
+                <ul class="space-y-1 list-disc pl-5">
+                  {% for tableau in preview.tableaux %}
+                    <li>{{ tableau.nom }} ({{ tableau.code }}) — classement max {{ tableau.classement_max }}</li>
+                  {% endfor %}
+                </ul>
           {% else %}
             Aucun tableau saisi pour le moment.
           {% endif %}
@@ -209,7 +222,7 @@
     const addButton = document.querySelector('[data-action="add-table"]');
     const template = document.querySelector('#empty-table-form-template');
     const totalFormsInput = document.querySelector('#id_tableaux-TOTAL_FORMS');
-    const formsetPrefixPattern = /tableaux-\d+-/g;
+    const formsetPrefixPattern = /tableaux-(?:__prefix__|\d+)-/g;
 
     if (!formsetContainer || !addButton || !template || !totalFormsInput) {
       return;
