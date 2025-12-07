@@ -213,7 +213,7 @@
     const addButton = document.querySelector('[data-action="add-table"]');
     const template = document.querySelector('#empty-table-form-template');
     const totalFormsInput = document.querySelector('#id_tableaux-TOTAL_FORMS');
-    const formsetPrefixPattern = /tableaux-\d+-/g;
+    const formsetPrefixPattern = /tableaux-(?:__prefix__|\d+)-/g;
 
     if (!formsetContainer || !addButton || !template || !totalFormsInput) {
       return;
