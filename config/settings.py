@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'tailwind',
     "theme",
     "core",
-    "competitions"
 ]
 
 MIDDLEWARE = [
