@@ -10,7 +10,7 @@ class TournamentForm(forms.Form):
         max_length=120,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Open de Saint-Paul",
+                "placeholder": "Ex: Tournoi des Aiglons d'Orient",
                 "class": COMMON_INPUT_CLASSES,
             }
         ),
@@ -30,7 +30,7 @@ class TournamentForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Gymnase Nelson",
+                "placeholder": "Ex: Gymnase des 2 Canons",
                 "class": COMMON_INPUT_CLASSES,
             }
         ),
@@ -73,17 +73,18 @@ class TableForm(forms.Form):
         max_length=80,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Tableau A", "class": COMMON_INPUT_CLASSES
+                "placeholder": "Ex. Tableau A", "class": COMMON_INPUT_CLASSES
             }
         ),
     )
     classement_max = forms.IntegerField(
         label="Classement maximal autorisé",
-        min_value=0,
+        min_value=500,
         widget=forms.NumberInput(
             attrs={
                 "class": COMMON_INPUT_CLASSES,
                 "placeholder": "Ex. 1299",
+                "min": 500, # ajoute aussi dans le HTML pour le contrôle côté client
             }
         ),
     )
