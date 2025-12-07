@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Nouveau tournoi — Ping FFTT{% endblock %}
+{% block content %}
+
+<section class="mb-8">
+  <p class="text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400">Tournois</p>
+  <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Créer un nouveau tournoi</h1>
+  <p class="mt-2 text-slate-700 dark:text-slate-300 max-w-3xl">
+    Saisissez les informations principales de votre tournoi. L’enregistrement en base n’est pas encore actif :
+    cette page sert de maquette pour affiner le parcours et la présentation du formulaire.
+  </p>
+</section>
+
+<div class="grid gap-6 lg:grid-cols-3">
+  <section class="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Informations générales</h2>
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div class="space-y-2">
+        <label for="id_nom" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.nom.label }}</label>
+        {{ form.nom }}
+        {% if form.nom.errors %}<p class="text-sm text-red-600">{{ form.nom.errors|join:", " }}</p>{% endif %}
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="space-y-2">
+          <label for="id_date" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.date.label }}</label>
+          {{ form.date }}
+          {% if form.date.errors %}<p class="text-sm text-red-600">{{ form.date.errors|join:", " }}</p>{% endif %}
+        </div>
+
+        <div class="space-y-2">
+          <label for="id_nb_tables" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.nb_tables.label }}</label>
+          {{ form.nb_tables }}
+          {% if form.nb_tables.errors %}<p class="text-sm text-red-600">{{ form.nb_tables.errors|join:", " }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="id_lieu" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.lieu.label }}</label>
+        {{ form.lieu }}
+        {% if form.lieu.errors %}<p class="text-sm text-red-600">{{ form.lieu.errors|join:", " }}</p>{% endif %}
+      </div>
+
+      <div class="space-y-2">
+        <label for="id_contraintes" class="block text-sm font-medium text-slate-700 dark:text-slate-200">{{ form.contraintes.label }}</label>
+        {{ form.contraintes }}
+        <p class="text-sm text-slate-500 dark:text-slate-400">Indiquez vos règles maison : quotas, anti-club, format des tableaux…</p>
+        {% if form.contraintes.errors %}<p class="text-sm text-red-600">{{ form.contraintes.errors|join:", " }}</p>{% endif %}
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button type="submit"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-sky-600 text-white font-semibold shadow-sm hover:bg-sky-500 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
+          Prévisualiser
+        </button>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Validation front uniquement pour l’instant.</p>
+      </div>
+    </form>
+  </section>
+
+  <aside class="space-y-4">
+    <div class="bg-slate-900 text-white rounded-xl shadow-sm p-5">
+      <h3 class="text-lg font-semibold mb-2">Objectif</h3>
+      <p class="text-sm text-slate-100">Affiner le parcours “nouveau tournoi” sans dépendre des modèles supprimés. Les prochaines étapes pourront brancher ce formulaire sur la persistance.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Conseils</h3>
+      <ul class="list-disc pl-5 space-y-1 text-sm text-slate-700 dark:text-slate-300">
+        <li>Préparez les bornes des tableaux et vos contraintes globales.</li>
+        <li>Définissez le nombre de tables disponibles pour anticiper le planning.</li>
+        <li>Les imports (CSV/YAML) reviendront plus tard, concentrons-nous sur l’expérience.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+{% if preview %}
+  <section class="mt-8 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl p-6 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-100">
+    <h2 class="text-xl font-semibold mb-3">Résumé prêt à enregistrer</h2>
+    <dl class="grid gap-3 sm:grid-cols-2 text-sm">
+      <div>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Nom</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">{{ preview.nom }}</dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Date</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">{{ preview.date }}</dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Lieu</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">{{ preview.lieu|default:"—" }}</dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Tables</dt>
+        <dd class="text-slate-900 dark:text-emerald-100">{{ preview.nb_tables }}</dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="font-medium text-slate-700 dark:text-emerald-50">Contraintes</dt>
+        <dd class="text-slate-900 dark:text-emerald-100 whitespace-pre-line">{{ preview.contraintes|default:"Aucune précision pour le moment." }}</dd>
+      </div>
+    </dl>
+    <p class="mt-4 text-sm text-emerald-800 dark:text-emerald-200">Étape suivante : connecter ce formulaire à la future couche de persistance.</p>
+  </section>
+{% endif %}
+
+{% endblock %}

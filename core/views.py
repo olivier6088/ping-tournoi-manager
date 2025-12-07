@@ -1,8 +1,20 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
+
+from .forms import TournamentForm
 
 def home(request):
-    # template = loader.get_template("core/home.html")
-    # return HttpResponse(template.render(request=request))
     return render(request, "core/home.html")
+
+
+def create_tournament(request):
+    preview = None
+    form = TournamentForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        preview = form.cleaned_data
+
+    return render(
+        request,
+        "core/create_tournament.html",
+        {"form": form, "preview": preview},
+    )
