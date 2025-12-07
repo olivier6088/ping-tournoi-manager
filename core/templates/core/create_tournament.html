@@ -133,12 +133,16 @@
         </template>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button type="submit"
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="submit" name="action" value="save"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm hover:bg-emerald-500 focus:outline-none focus-visible:ring focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
+          Enregistrer le tournoi
+        </button>
+        <button type="submit" name="action" value="preview"
           class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-sky-600 text-white font-semibold shadow-sm hover:bg-sky-500 focus:outline-none focus-visible:ring focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
           Prévisualiser
         </button>
-        <p class="text-sm text-slate-600 dark:text-slate-400">Validation front uniquement pour l’instant.</p>
+        <p class="text-sm text-slate-600 dark:text-slate-400">Une fois sauvegardé, vous pourrez importer un CSV de joueurs et les affecter à leurs tableaux.</p>
       </div>
     </form>
   </section>

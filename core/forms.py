@@ -1,90 +1,87 @@
 from django import forms
+from django.core.validators import FileExtensionValidator
+
+from .models import Table, Tournament
 
 
 COMMON_INPUT_CLASSES = "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
 
 
-class TournamentForm(forms.Form):
-    nom = forms.CharField(
-        label="Nom du tournoi",
-        max_length=120,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Ex: Tournoi des Aiglons d'Orient",
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
-    date = forms.DateField(
-        label="Date",
-        widget=forms.DateInput(
-            attrs={
-                "type": "date",
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
-    lieu = forms.CharField(
-        label="Lieu",
-        max_length=120,
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Ex: Gymnase des 2 Canons",
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
-    nb_tables = forms.IntegerField(
-        label="Nombre de tables",
-        min_value=1,
-        initial=16,
-        widget=forms.NumberInput(
-            attrs={
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
-    max_simples = forms.IntegerField(
-        label="Nombre maximum de simples par joueur",
-        min_value=0,
-        initial=2,
-        widget=forms.NumberInput(
-            attrs={
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
-    max_doubles = forms.IntegerField(
-        label="Nombre maximum de doubles par joueur",
-        min_value=0,
-        initial=1,
-        widget=forms.NumberInput(
-            attrs={
-                "class": COMMON_INPUT_CLASSES,
-            }
-        ),
-    )
+class TournamentForm(forms.ModelForm):
+    class Meta:
+        model = Tournament
+        fields = [
+            "nom",
+            "date",
+            "lieu",
+            "nb_tables",
+            "max_simples",
+            "max_doubles",
+        ]
+        widgets = {
+            "nom": forms.TextInput(
+                attrs={
+                    "placeholder": "Ex: Tournoi des Aiglons d'Orient",
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "lieu": forms.TextInput(
+                attrs={
+                    "placeholder": "Ex: Gymnase des 2 Canons",
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "nb_tables": forms.NumberInput(
+                attrs={
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "max_simples": forms.NumberInput(
+                attrs={
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "max_doubles": forms.NumberInput(
+                attrs={
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+        }
 
 
-class TableForm(forms.Form):
-    nom = forms.CharField(
-        label="Nom du tableau",
-        max_length=80,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Ex. Tableau A", "class": COMMON_INPUT_CLASSES
-            }
+class TableForm(forms.ModelForm):
+    class Meta:
+        model = Table
+        fields = ["nom", "classement_max"]
+        widgets = {
+            "nom": forms.TextInput(
+                attrs={
+                    "placeholder": "Ex. Tableau A",
+                    "class": COMMON_INPUT_CLASSES,
+                }
+            ),
+            "classement_max": forms.NumberInput(
+                attrs={
+                    "class": COMMON_INPUT_CLASSES,
+                    "placeholder": "Ex. 1299",
+                    "min": 500,
+                }
+            ),
+        }
+
+
+class PlayerImportForm(forms.Form):
+    fichier = forms.FileField(
+        label="Fichier CSV des joueurs",
+        validators=[FileExtensionValidator(["csv"])],
+        widget=forms.ClearableFileInput(
+            attrs={"class": "block w-full text-sm text-slate-700 dark:text-slate-200"}
         ),
-    )
-    classement_max = forms.IntegerField(
-        label="Classement maximal autorisé",
-        min_value=500,
-        widget=forms.NumberInput(
-            attrs={
-                "class": COMMON_INPUT_CLASSES,
-                "placeholder": "Ex. 1299",
-                "min": 500, # ajoute aussi dans le HTML pour le contrôle côté client
-            }
-        ),
+        help_text="Le fichier doit contenir les colonnes licence, nom, prenom, sexe, club, points, date_naissance et tableau.",
     )

@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
-from core.views import create_tournament, home
+from core.views import create_tournament, home, tournament_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", home, name="home"),
     path("tournois/nouveau/", create_tournament, name="create_tournament"),
+    path("tournois/<int:pk>/", tournament_detail, name="tournament_detail"),
 ]
 
 if settings.DEBUG:

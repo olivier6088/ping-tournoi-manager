@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ tournament.nom }} — Tournoi{% endblock %}
+{% block content %}
+
+<section class="mb-8 space-y-2">
+  <p class="text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400">Tournois</p>
+  <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{{ tournament.nom }}</h1>
+  <p class="text-slate-700 dark:text-slate-300">{{ tournament.date }} — {{ tournament.lieu|default:"Lieu à préciser" }}</p>
+</section>
+
+<div class="grid gap-6 lg:grid-cols-3">
+  <section class="lg:col-span-2 space-y-6">
+    <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Tableaux</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Affectez les joueurs en utilisant le nom exact du tableau dans le CSV.</p>
+        </div>
+        <a href="{% url 'create_tournament' %}"
+           class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
+          Nouveau tournoi
+        </a>
+      </div>
+      {% if tables %}
+        <ul class="divide-y divide-slate-200 dark:divide-slate-700">
+          {% for table in tables %}
+            <li class="py-3 flex items-center justify-between">
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">{{ table.nom }}</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Classement max {{ table.classement_max }}</p>
+              </div>
+              <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200">{{ table.players.count }} joueurs</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-sm text-slate-600 dark:text-slate-400">Aucun tableau enregistré pour ce tournoi.</p>
+      {% endif %}
+    </div>
+
+    <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Joueurs importés</h2>
+      {% if players %}
+        <div class="overflow-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-600 dark:text-slate-300">
+                <th class="py-2 pr-4">Licence</th>
+                <th class="py-2 pr-4">Nom</th>
+                <th class="py-2 pr-4">Prénom</th>
+                <th class="py-2 pr-4">Club</th>
+                <th class="py-2 pr-4">Points</th>
+                <th class="py-2 pr-4">Tableau</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+              {% for player in players %}
+                <tr class="text-slate-800 dark:text-slate-100">
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.licence }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.nom }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.prenom }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.club }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.points }}</td>
+                  <td class="py-2 pr-4 whitespace-nowrap">{{ player.tableau.nom|default:"Non affecté" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-sm text-slate-600 dark:text-slate-400">Aucun joueur importé pour l'instant.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <aside class="space-y-4">
+    <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Importer des joueurs</h2>
+      <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Téléversez un fichier CSV contenant les colonnes&nbsp;: licence, nom, prenom, sexe, club, points, date_naissance et tableau (nom du tableau créé ci-dessus).</p>
+      <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div class="space-y-2">
+          {{ import_form.fichier.label_tag }}
+          {{ import_form.fichier }}
+          {% if import_form.fichier.help_text %}
+            <p class="text-xs text-slate-500 dark:text-slate-400">{{ import_form.fichier.help_text }}</p>
+          {% endif %}
+          {% if import_form.fichier.errors %}
+            <p class="text-sm text-red-600">{{ import_form.fichier.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm hover:bg-emerald-500 focus:outline-none focus-visible:ring focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-800">
+          Importer le CSV
+        </button>
+      </form>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-900 text-white p-5">
+      <h3 class="text-lg font-semibold mb-2">Astuces</h3>
+      <ul class="list-disc pl-5 space-y-1 text-sm text-slate-100/90">
+        <li>Le champ « tableau » doit correspondre au nom exact d'un tableau.</li>
+        <li>Les entrées existantes sont mises à jour si la licence est déjà importée.</li>
+        <li>Les dates acceptent les formats AAAA-MM-JJ ou JJ/MM/AAAA.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+{% endblock %}
